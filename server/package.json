@@ -1,0 +1,18 @@
+{
+  "name": "mugix-server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "seed-admin": "node src/scripts/seedAdmin.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "mongoose": "^8.5.0",
+    "multer": "^2.0.2",
+    "jsonwebtoken": "^9.0.0"
+  }
+}

@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Mugix Water Brand Design System - Clean, Fresh, Premium */
+
+@layer base {
+  :root {
+    /* Core water-inspired palette */
+    --background: 200 20% 98%;
+    --foreground: 210 40% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 40% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 40% 12%;
+
+    /* Primary - Deep Ocean Blue */
+    --primary: 205 85% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Soft Mist */
+    --secondary: 200 30% 94%;
+    --secondary-foreground: 210 40% 12%;
+
+    /* Muted - Light Cloud */
+    --muted: 200 20% 96%;
+    --muted-foreground: 210 20% 45%;
+
+    /* Accent - Crystal Cyan */
+    --accent: 190 90% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 25% 90%;
+    --input: 200 25% 90%;
+    --ring: 205 85% 45%;
+
+    --radius: 0.75rem;
+
+    /* Extended water palette */
+    --water-light: 195 100% 95%;
+    --water-medium: 200 80% 70%;
+    --water-deep: 210 70% 35%;
+    --water-gradient: linear-gradient(135deg, hsl(195 100% 95%) 0%, hsl(200 80% 85%) 50%, hsl(205 85% 75%) 100%);
+    --water-gradient-dark: linear-gradient(180deg, hsl(205 85% 45%) 0%, hsl(210 70% 35%) 100%);
+    --water-shimmer: linear-gradient(90deg, transparent 0%, hsl(200 80% 90% / 0.5) 50%, transparent 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(210 40% 12% / 0.08);
+    --shadow-medium: 0 8px 30px -8px hsl(210 40% 12% / 0.12);
+    --shadow-elevated: 0 16px 50px -12px hsl(210 40% 12% / 0.18);
+
+    /* Admin specific */
+    --sidebar-background: 210 40% 12%;
+    --sidebar-foreground: 200 20% 95%;
+    --sidebar-primary: 205 85% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 35% 18%;
+    --sidebar-accent-foreground: 200 20% 95%;
+    --sidebar-border: 210 30% 20%;
+    --sidebar-ring: 205 85% 55%;
+  }
+
+  .dark {
+    --background: 210 40% 8%;
+    --foreground: 200 20% 95%;
+
+    --card: 210 35% 12%;
+    --card-foreground: 200 20% 95%;
+
+    --popover: 210 35% 12%;
+    --popover-foreground: 200 20% 95%;
+
+    --primary: 200 85% 60%;
+    --primary-foreground: 210 40% 8%;
+
+    --secondary: 210 30% 18%;
+    --secondary-foreground: 200 20% 95%;
+
+    --muted: 210 30% 15%;
+    --muted-foreground: 200 15% 60%;
+
+    --accent: 190 80% 55%;
+    --accent-foreground: 210 40% 8%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 30% 20%;
+    --input: 210 30% 20%;
+    --ring: 200 85% 60%;
+
+    --water-light: 210 40% 15%;
+    --water-medium: 205 60% 40%;
+    --water-deep: 210 70% 25%;
+    --water-gradient: linear-gradient(135deg, hsl(210 40% 15%) 0%, hsl(205 60% 25%) 50%, hsl(200 70% 35%) 100%);
+    --water-gradient-dark: linear-gradient(180deg, hsl(200 85% 60%) 0%, hsl(205 70% 45%) 100%);
+
+    --shadow-soft: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
+    --shadow-medium: 0 8px 30px -8px hsl(0 0% 0% / 0.4);
+    --shadow-elevated: 0 16px 50px -12px hsl(0 0% 0% / 0.5);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--water-gradient-dark);
+  }
+
+  .bg-water-gradient {
+    background: var(--water-gradient);
+  }
+
+  .bg-water-dark {
+    background: var(--water-gradient-dark);
+  }
+
+  .water-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .water-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--water-shimmer);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes ripple {
+    0% { transform: scale(1); opacity: 0.4; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  @keyframes wave {
+    0% { transform: translateX(0) translateZ(0) scaleY(1); }
+    50% { transform: translateX(-25%) translateZ(0) scaleY(0.55); }
+    100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .animate-ripple {
+    animation: ripple 1.5s ease-out infinite;
+  }
+
+  .animate-wave {
+    animation: wave 15s linear infinite;
+  }
+
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/30;
+  }
+
+  .glass-dark {
+    @apply bg-black/20 backdrop-blur-xl border border-white/10;
+  }
+}
