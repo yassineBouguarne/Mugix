@@ -16,6 +16,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// Configuration du PORT pour le Cloud
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -40,33 +42,7 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "Mugix API is running" });
 });
 
-async function startServer() {
-  let port = Number(process.env.PORT) || 5000;
-  const maxAttempts = 10;
-
-  for (let i = 0; i < maxAttempts; i++) {
-    try {
-      await new Promise((resolve, reject) => {
-        const server = app.listen(port);
-        server.on("listening", () => resolve(server));
-        server.on("error", (err) => reject(err));
-      });
-
-      console.log(`Server running on http://localhost:${port}`);
-      return;
-    } catch (err) {
-      if (err && err.code === "EADDRINUSE") {
-        console.warn(`Port ${port} in use, trying ${port + 1}...`);
-        port += 1;
-        continue;
-      }
-      console.error(err);
-      process.exit(1);
-    }
-  }
-
-  console.error(`Failed to bind server after ${maxAttempts} attempts.`);
-  process.exit(1);
-}
-
-startServer();
+// Lancement simple (indispensable pour Render)
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running on port ${PORT}`);
+});
