@@ -15,9 +15,9 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0
   },
-  image_url: {
-    type: String,
-    default: null
+  images: {
+    type: [String],
+    default: []
   },
   category_id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -34,10 +34,19 @@ const productSchema = new mongoose.Schema({
     virtuals: true,
     transform: (doc, ret) => {
       ret.id = ret._id.toString();
+      ret.image_url = ret.images && ret.images.length > 0 ? ret.images[0] : null;
       delete ret._id;
       delete ret.__v;
       return ret;
     }
+  }
+});
+
+// Auto-migration: convertir l'ancien champ image_url en images[]
+productSchema.post('init', function(doc) {
+  if (doc._doc.image_url && (!doc.images || doc.images.length === 0)) {
+    doc.images = [doc._doc.image_url];
+    doc.save();
   }
 });
 

@@ -4,103 +4,107 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mugix Water Brand Design System - Clean, Fresh, Premium */
+/* Mugix Modern Eco Design System - Clean, Sustainable, Design-Forward */
 
 @layer base {
+  html, body {
+    overflow-x: hidden;
+  }
+
   :root {
-    /* Core water-inspired palette */
-    --background: 200 20% 98%;
-    --foreground: 210 40% 12%;
+    /* Core modern eco palette */
+    --background: 210 20% 99%;
+    --foreground: 220 25% 12%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 210 40% 12%;
+    --card: 210 15% 100%;
+    --card-foreground: 220 25% 12%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 40% 12%;
+    --popover: 210 15% 100%;
+    --popover-foreground: 220 25% 12%;
 
-    /* Primary - Deep Ocean Blue */
-    --primary: 205 85% 45%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary - Deep Teal */
+    --primary: 190 80% 35%;
+    --primary-foreground: 210 20% 99%;
 
-    /* Secondary - Soft Mist */
-    --secondary: 200 30% 94%;
-    --secondary-foreground: 210 40% 12%;
+    /* Secondary - Cool Gray */
+    --secondary: 220 10% 94%;
+    --secondary-foreground: 220 25% 12%;
 
-    /* Muted - Light Cloud */
-    --muted: 200 20% 96%;
-    --muted-foreground: 210 20% 45%;
+    /* Muted - Light Cool Gray */
+    --muted: 215 15% 96%;
+    --muted-foreground: 220 10% 45%;
 
-    /* Accent - Crystal Cyan */
-    --accent: 190 90% 50%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent - Coral */
+    --accent: 15 85% 58%;
+    --accent-foreground: 210 20% 99%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 200 25% 90%;
-    --input: 200 25% 90%;
-    --ring: 205 85% 45%;
+    --border: 220 12% 90%;
+    --input: 220 12% 90%;
+    --ring: 190 80% 35%;
 
     --radius: 0.75rem;
 
-    /* Extended water palette */
-    --water-light: 195 100% 95%;
-    --water-medium: 200 80% 70%;
-    --water-deep: 210 70% 35%;
-    --water-gradient: linear-gradient(135deg, hsl(195 100% 95%) 0%, hsl(200 80% 85%) 50%, hsl(205 85% 75%) 100%);
-    --water-gradient-dark: linear-gradient(180deg, hsl(205 85% 45%) 0%, hsl(210 70% 35%) 100%);
-    --water-shimmer: linear-gradient(90deg, transparent 0%, hsl(200 80% 90% / 0.5) 50%, transparent 100%);
+    /* Extended palette */
+    --nature-light: 190 30% 95%;
+    --nature-medium: 190 60% 50%;
+    --nature-deep: 195 70% 22%;
+    --nature-gradient: linear-gradient(135deg, hsl(210 20% 98%) 0%, hsl(195 30% 92%) 50%, hsl(190 40% 88%) 100%);
+    --nature-gradient-dark: linear-gradient(180deg, hsl(190 80% 35%) 0%, hsl(200 70% 22%) 100%);
+    --nature-shimmer: linear-gradient(90deg, transparent 0%, hsl(190 40% 92% / 0.5) 50%, transparent 100%);
 
     /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(210 40% 12% / 0.08);
-    --shadow-medium: 0 8px 30px -8px hsl(210 40% 12% / 0.12);
-    --shadow-elevated: 0 16px 50px -12px hsl(210 40% 12% / 0.18);
+    --shadow-soft: 0 4px 20px -4px hsl(220 25% 12% / 0.08);
+    --shadow-medium: 0 8px 30px -8px hsl(220 25% 12% / 0.12);
+    --shadow-elevated: 0 16px 50px -12px hsl(220 25% 12% / 0.18);
 
     /* Admin specific */
-    --sidebar-background: 210 40% 12%;
-    --sidebar-foreground: 200 20% 95%;
-    --sidebar-primary: 205 85% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 35% 18%;
-    --sidebar-accent-foreground: 200 20% 95%;
-    --sidebar-border: 210 30% 20%;
-    --sidebar-ring: 205 85% 55%;
+    --sidebar-background: 210 30% 10%;
+    --sidebar-foreground: 210 15% 95%;
+    --sidebar-primary: 190 70% 50%;
+    --sidebar-primary-foreground: 210 20% 99%;
+    --sidebar-accent: 210 25% 16%;
+    --sidebar-accent-foreground: 210 15% 95%;
+    --sidebar-border: 210 20% 20%;
+    --sidebar-ring: 190 70% 50%;
   }
 
   .dark {
-    --background: 210 40% 8%;
-    --foreground: 200 20% 95%;
+    --background: 210 20% 8%;
+    --foreground: 210 15% 95%;
 
-    --card: 210 35% 12%;
-    --card-foreground: 200 20% 95%;
+    --card: 210 20% 12%;
+    --card-foreground: 210 15% 95%;
 
-    --popover: 210 35% 12%;
-    --popover-foreground: 200 20% 95%;
+    --popover: 210 20% 12%;
+    --popover-foreground: 210 15% 95%;
 
-    --primary: 200 85% 60%;
-    --primary-foreground: 210 40% 8%;
+    --primary: 190 70% 50%;
+    --primary-foreground: 210 20% 8%;
 
-    --secondary: 210 30% 18%;
-    --secondary-foreground: 200 20% 95%;
+    --secondary: 210 20% 18%;
+    --secondary-foreground: 210 15% 95%;
 
-    --muted: 210 30% 15%;
-    --muted-foreground: 200 15% 60%;
+    --muted: 210 15% 15%;
+    --muted-foreground: 215 12% 60%;
 
-    --accent: 190 80% 55%;
-    --accent-foreground: 210 40% 8%;
+    --accent: 15 75% 60%;
+    --accent-foreground: 210 20% 8%;
 
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 30% 20%;
-    --input: 210 30% 20%;
-    --ring: 200 85% 60%;
+    --border: 210 15% 22%;
+    --input: 210 15% 22%;
+    --ring: 190 70% 50%;
 
-    --water-light: 210 40% 15%;
-    --water-medium: 205 60% 40%;
-    --water-deep: 210 70% 25%;
-    --water-gradient: linear-gradient(135deg, hsl(210 40% 15%) 0%, hsl(205 60% 25%) 50%, hsl(200 70% 35%) 100%);
-    --water-gradient-dark: linear-gradient(180deg, hsl(200 85% 60%) 0%, hsl(205 70% 45%) 100%);
+    --nature-light: 190 20% 16%;
+    --nature-medium: 190 40% 35%;
+    --nature-deep: 195 30% 22%;
+    --nature-gradient: linear-gradient(135deg, hsl(210 15% 12%) 0%, hsl(195 20% 18%) 50%, hsl(190 25% 25%) 100%);
+    --nature-gradient-dark: linear-gradient(180deg, hsl(190 70% 50%) 0%, hsl(200 50% 35%) 100%);
 
     --shadow-soft: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
     --shadow-medium: 0 8px 30px -8px hsl(0 0% 0% / 0.4);
@@ -126,27 +130,27 @@
 @layer utilities {
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: var(--water-gradient-dark);
+    background-image: var(--nature-gradient-dark);
   }
 
-  .bg-water-gradient {
-    background: var(--water-gradient);
+  .bg-nature-gradient {
+    background: var(--nature-gradient);
   }
 
-  .bg-water-dark {
-    background: var(--water-gradient-dark);
+  .bg-nature-dark {
+    background: var(--nature-gradient-dark);
   }
 
-  .water-shimmer {
+  .nature-shimmer {
     position: relative;
     overflow: hidden;
   }
 
-  .water-shimmer::after {
+  .nature-shimmer::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--water-shimmer);
+    background: var(--nature-shimmer);
     animation: shimmer 3s ease-in-out infinite;
   }
 

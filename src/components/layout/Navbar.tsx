@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Droplets } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/products", label: "Products" },
-  { href: "/delivery", label: "Delivery" },
+  { href: "/", label: "Accueil" },
+  { href: "/products", label: "Produits" },
+  { href: "/about", label: "À Propos" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -17,16 +17,14 @@ export function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass">
       <nav className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="flex items-center justify-between h-14 lg:h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="relative">
-              <Droplets className="h-8 w-8 text-primary transition-transform group-hover:scale-110" />
-              <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <span className="font-display text-2xl font-bold text-foreground">
-              Mugix
-            </span>
+          <Link to="/" className="group">
+            <img
+              src="/assets/mugix-logo.png"
+              alt="Mugix"
+              className="h-8 transition-transform group-hover:scale-105"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -49,7 +47,7 @@ export function Navbar() {
           {/* CTA Button */}
           <div className="hidden lg:block">
             <Button asChild>
-              <Link to="/products">Order Now</Link>
+              <Link to="/products">Commander</Link>
             </Button>
           </div>
 
@@ -57,7 +55,7 @@ export function Navbar() {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="lg:hidden p-2 text-foreground"
-            aria-label="Toggle menu"
+            aria-label="Ouvrir le menu"
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -83,7 +81,7 @@ export function Navbar() {
               ))}
               <Button asChild className="w-full mt-2">
                 <Link to="/products" onClick={() => setIsOpen(false)}>
-                  Order Now
+                  Commander
                 </Link>
               </Button>
             </div>

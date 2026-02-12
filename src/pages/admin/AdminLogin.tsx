@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Droplets, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,8 +16,10 @@ import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 
 const authSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  email: z.string().email("Veuillez entrer une adresse email valide"),
+  password: z
+    .string()
+    .min(6, "Le mot de passe doit contenir au moins 6 caractères"),
 });
 
 export default function AdminLogin() {
@@ -36,7 +38,7 @@ export default function AdminLogin() {
     const result = authSchema.safeParse({ email, password });
     if (!result.success) {
       toast({
-        title: "Validation Error",
+        title: "Erreur de Validation",
         description: result.error.errors[0].message,
         variant: "destructive",
       });
@@ -51,23 +53,23 @@ export default function AdminLogin() {
         if (error) {
           if (error.message.includes("already registered")) {
             toast({
-              title: "Account Exists",
+              title: "Compte Existant",
               description:
-                "This email is already registered. Please sign in instead.",
+                "Cet email est déjà enregistré. Veuillez vous connecter.",
               variant: "destructive",
             });
           } else {
             toast({
-              title: "Sign Up Failed",
+              title: "Échec de l'Inscription",
               description: error.message,
               variant: "destructive",
             });
           }
         } else {
           toast({
-            title: "Check Your Email",
+            title: "Vérifiez Votre Email",
             description:
-              "We've sent you a confirmation email. Please verify your email to continue.",
+              "Nous vous avons envoyé un email de confirmation. Veuillez vérifier votre email pour continuer.",
           });
         }
       } else {
@@ -75,13 +77,14 @@ export default function AdminLogin() {
         if (error) {
           if (error.message.includes("Invalid login credentials")) {
             toast({
-              title: "Invalid Credentials",
-              description: "The email or password you entered is incorrect.",
+              title: "Identifiants Invalides",
+              description:
+                "L'email ou le mot de passe que vous avez entré est incorrect.",
               variant: "destructive",
             });
           } else {
             toast({
-              title: "Sign In Failed",
+              title: "Échec de la Connexion",
               description: error.message,
               variant: "destructive",
             });
@@ -92,8 +95,9 @@ export default function AdminLogin() {
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
+        title: "Erreur",
+        description:
+          "Une erreur inattendue s'est produite. Veuillez réessayer.",
         variant: "destructive",
       });
     } finally {
@@ -102,21 +106,19 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-water-gradient p-4">
+    <div className="min-h-screen flex items-center justify-center bg-nature-gradient p-4">
       <Card className="w-full max-w-md border-0 shadow-elevated">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-              <Droplets className="h-8 w-8 text-primary" />
-            </div>
+            <img src="/assets/mugix-logo.png" alt="Mugix" className="h-16" />
           </div>
           <CardTitle className="font-display text-2xl">
-            {isSignUp ? "Create Account" : "Admin Login"}
+            {isSignUp ? "Créer un Compte" : "Connexion Admin"}
           </CardTitle>
           <CardDescription>
             {isSignUp
-              ? "Sign up to access the admin dashboard"
-              : "Sign in to manage your products"}
+              ? "Inscrivez-vous pour accéder au tableau de bord"
+              : "Connectez-vous pour gérer vos produits"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -134,7 +136,7 @@ export default function AdminLogin() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Mot de passe</Label>
               <Input
                 id="password"
                 type="password"
@@ -148,7 +150,7 @@ export default function AdminLogin() {
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isSignUp ? "Create Account" : "Sign In"}
+              {isSignUp ? "Créer un Compte" : "Se Connecter"}
             </Button>
           </form>
 
@@ -159,14 +161,14 @@ export default function AdminLogin() {
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               {isSignUp
-                ? "Already have an account? Sign in"
-                : "Need an account? Sign up"}
+                ? "Vous avez déjà un compte ? Se connecter"
+                : "Pas de compte ? S'inscrire"}
             </button>
           </div>
 
           <p className="mt-4 text-xs text-center text-muted-foreground">
-            Note: New accounts need admin role assignment to access the
-            dashboard.
+            Note : Les nouveaux comptes nécessitent l'attribution du rôle
+            administrateur pour accéder au tableau de bord.
           </p>
         </CardContent>
       </Card>

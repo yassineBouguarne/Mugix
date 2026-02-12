@@ -51,10 +51,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        water: {
-          light: "hsl(var(--water-light))",
-          medium: "hsl(var(--water-medium))",
-          deep: "hsl(var(--water-deep))",
+        nature: {
+          light: "hsl(var(--nature-light))",
+          medium: "hsl(var(--nature-medium))",
+          deep: "hsl(var(--nature-deep))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",

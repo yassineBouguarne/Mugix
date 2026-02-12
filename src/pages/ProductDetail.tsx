@@ -1,23 +1,51 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { MessageCircle, ArrowLeft, Droplets, Check } from "lucide-react";
+import { MessageCircle, ArrowLeft, Package, Check } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useProduct } from "@/hooks/useProducts";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getImageUrl } from "@/lib/image";
+import { getImageUrls } from "@/lib/image";
+import { cn } from "@/lib/utils";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const { data: product, isLoading, error } = useProduct(id || "");
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+
+  useEffect(() => {
+    if (!carouselApi) return;
+    const onSelect = () => {
+      setSelectedIndex(carouselApi.selectedScrollSnap());
+    };
+    carouselApi.on("select", onSelect);
+    return () => {
+      carouselApi.off("select", onSelect);
+    };
+  }, [carouselApi]);
+
+  const scrollToImage = (index: number) => {
+    carouselApi?.scrollTo(index);
+    setSelectedIndex(index);
+  };
 
   if (isLoading) {
     return (
       <Layout>
-        <section className="py-12 lg:py-20">
+        <section className="pb-12 lg:py-20">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <Skeleton className="aspect-square rounded-2xl" />
+              <Skeleton className="aspect-[4/3] max-h-[500px] max-w-[600px] mx-auto rounded-2xl" />
               <div className="space-y-4">
                 <Skeleton className="h-10 w-3/4" />
                 <Skeleton className="h-6 w-1/4" />
@@ -37,13 +65,13 @@ export default function ProductDetail() {
         <section className="py-20 lg:py-32">
           <div className="container mx-auto px-4 lg:px-8 text-center">
             <h1 className="font-display text-3xl font-bold text-foreground mb-4">
-              Product Not Found
+              Produit Non Trouvé
             </h1>
             <p className="text-muted-foreground mb-8">
-              The product you're looking for doesn't exist or has been removed.
+              Le produit que vous recherchez n'existe pas ou a été supprimé.
             </p>
             <Button asChild>
-              <Link to="/products">Browse Products</Link>
+              <Link to="/products">Parcourir les Produits</Link>
             </Button>
           </div>
         </section>
@@ -54,11 +82,13 @@ export default function ProductDetail() {
   const whatsappNumber =
     import.meta.env.VITE_WHATSAPP_NUMBER || "+212679545622";
   const whatsappMessage = encodeURIComponent(
-    `Hi! I want to order: ${product.name} – Price: $${Number(product.price).toFixed(2)} – Quantity: 1 – Link: ${window.location.href}`,
+    `Bonjour ! Je souhaite commander : ${product.name} – Prix : ${Number(product.price).toFixed(2)} DH – Quantité : 1 – Lien : ${window.location.href}`,
   );
   const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${whatsappMessage}`;
 
-  const imageUrl = getImageUrl(product.image_url);
+  const imageUrls = getImageUrls(product.images);
+  const hasImages = imageUrls.length > 0;
+  const hasMultipleImages = imageUrls.length > 1;
 
   return (
     <Layout>
@@ -70,52 +100,96 @@ export default function ProductDetail() {
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Products
+            Retour aux Produits
           </Link>
         </div>
       </section>
 
       {/* Product Details */}
-      <section className="py-12 lg:py-20">
+      <section className="py-4 lg:py-6">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-            {/* Image */}
-            <div className="relative aspect-square bg-water-gradient rounded-2xl overflow-hidden">
-              {imageUrl ? (
-                <img
-                  src={imageUrl}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <Droplets className="h-32 w-32 text-primary/30 animate-float" />
-                </div>
-              )}
-              {product.category && (
-                <Badge className="absolute top-6 left-6 bg-card/90 text-foreground backdrop-blur-sm">
-                  {product.category.name}
-                </Badge>
-              )}
-              {!product.available && (
-                <div className="absolute inset-0 bg-foreground/60 flex items-center justify-center">
-                  <span className="text-background text-xl font-semibold">
-                    Out of Stock
-                  </span>
+            {/* Image Gallery */}
+            <div className="space-y-4">
+              <div className="relative aspect-[4/3] max-h-[500px] max-w-[600px] mx-auto bg-nature-gradient rounded-2xl overflow-hidden">
+                {hasImages ? (
+                  hasMultipleImages ? (
+                    <Carousel setApi={setCarouselApi} className="w-full h-full">
+                      <CarouselContent className="-ml-0">
+                        {imageUrls.map((url, index) => (
+                          <CarouselItem key={index} className="pl-0">
+                            <img
+                              src={url}
+                              alt={`${product.name} - Image ${index + 1}`}
+                              className="w-full h-full object-cover aspect-[4/3]"
+                            />
+                          </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                      <CarouselPrevious className="left-4 bg-background/80 backdrop-blur-sm" />
+                      <CarouselNext className="right-4 bg-background/80 backdrop-blur-sm" />
+                    </Carousel>
+                  ) : (
+                    <img
+                      src={imageUrls[0]}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
+                  )
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Package className="h-32 w-32 text-primary/30 animate-float" />
+                  </div>
+                )}
+                {product.category && (
+                  <Badge className="absolute top-6 left-6 bg-card/90 text-foreground backdrop-blur-sm z-10">
+                    {product.category.name}
+                  </Badge>
+                )}
+                {!product.available && (
+                  <div className="absolute inset-0 bg-foreground/60 flex items-center justify-center z-10">
+                    <span className="text-background text-xl font-semibold">
+                      Rupture de Stock
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Thumbnail strip */}
+              {hasMultipleImages && (
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {imageUrls.map((url, index) => (
+                    <button
+                      key={index}
+                      onClick={() => scrollToImage(index)}
+                      className={cn(
+                        "w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all",
+                        selectedIndex === index
+                          ? "border-primary ring-1 ring-primary"
+                          : "border-transparent opacity-70 hover:opacity-100",
+                      )}
+                    >
+                      <img
+                        src={url}
+                        alt={`${product.name} miniature ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
 
             {/* Details */}
             <div className="flex flex-col">
-              <div className="flex-1">
+              <div>
                 <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
                   {product.name}
                 </h1>
 
                 <div className="flex items-center gap-4 mb-6">
                   <span className="text-3xl font-bold text-primary">
-                    ${Number(product.price).toFixed(2)}
+                    {Number(product.price).toFixed(2)} DH
                   </span>
                   {product.available ? (
                     <Badge
@@ -123,14 +197,14 @@ export default function ProductDetail() {
                       className="text-primary border-primary"
                     >
                       <Check className="h-3 w-3 mr-1" />
-                      In Stock
+                      En Stock
                     </Badge>
                   ) : (
                     <Badge
                       variant="outline"
                       className="text-destructive border-destructive"
                     >
-                      Out of Stock
+                      Rupture de Stock
                     </Badge>
                   )}
                 </div>
@@ -138,29 +212,6 @@ export default function ProductDetail() {
                 <p className="text-muted-foreground text-lg leading-relaxed mb-8">
                   {product.description}
                 </p>
-
-                {/* Features */}
-                {/* <div className="space-y-4 mb-8">
-                  <h3 className="font-semibold text-foreground">
-                    Product Features
-                  </h3>
-                  <ul className="space-y-2">
-                    {[
-                      "Natural mountain spring source",
-                      "BPA-free recyclable bottle",
-                      "Mineral-rich composition",
-                      "Crisp, refreshing taste",
-                    ].map((feature) => (
-                      <li
-                        key={feature}
-                        className="flex items-center gap-3 text-muted-foreground"
-                      >
-                        <Check className="h-4 w-4 text-primary" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div> */}
               </div>
 
               {/* Order Button */}
@@ -177,11 +228,12 @@ export default function ProductDetail() {
                     rel="noopener noreferrer"
                   >
                     <MessageCircle className="h-5 w-5" />
-                    Order on WhatsApp
+                    Commander sur WhatsApp
                   </a>
                 </Button>
                 <p className="text-sm text-muted-foreground mt-4">
-                  Click to open WhatsApp with your order details pre-filled.
+                  Cliquez pour ouvrir WhatsApp avec les détails de votre
+                  commande pré-remplis.
                 </p>
               </div>
             </div>

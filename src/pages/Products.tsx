@@ -24,14 +24,14 @@ export default function Products() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="py-16 lg:py-24 bg-water-gradient">
+      <section className="py-16 lg:py-24 bg-nature-gradient">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-2xl">
             <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Our Products
+              Nos Produits
             </h1>
             <p className="text-lg text-muted-foreground">
-              Explore our range of premium bottled water.
+              Explorez notre gamme de bouteilles et mugs éco-responsables.
             </p>
           </div>
         </div>
@@ -75,20 +75,18 @@ export default function Products() {
       <section className="py-12 lg:py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
           {productsLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="space-y-4">
-                  <Skeleton className="aspect-square rounded-2xl" />
-                  <Skeleton className="h-6 w-3/4" />
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-10 w-1/2" />
-                </div>
+                <div
+                  key={i}
+                  className="w-[260px] h-[340px] bg-muted rounded-2xl animate-pulse"
+                />
               ))}
             </div>
           ) : (
             <>
               {availableProducts && availableProducts.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 justify-items-center">
                   {availableProducts.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -96,7 +94,9 @@ export default function Products() {
                       name={product.name}
                       description={product.description || ""}
                       price={Number(product.price)}
-                      imageUrl={product.image_url || undefined}
+                      imageUrl={
+                        product.images?.[0] || product.image_url || undefined
+                      }
                       category={product.category?.name}
                       available={product.available}
                     />
@@ -107,9 +107,9 @@ export default function Products() {
               {unavailableProducts && unavailableProducts.length > 0 && (
                 <div>
                   <h2 className="font-display text-2xl font-semibold text-muted-foreground mb-6">
-                    Currently Unavailable
+                    Actuellement Indisponible
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 opacity-60">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 opacity-60 justify-items-center">
                     {unavailableProducts.map((product) => (
                       <ProductCard
                         key={product.id}
@@ -117,7 +117,9 @@ export default function Products() {
                         name={product.name}
                         description={product.description || ""}
                         price={Number(product.price)}
-                        imageUrl={product.image_url || undefined}
+                        imageUrl={
+                          product.images?.[0] || product.image_url || undefined
+                        }
                         category={product.category?.name}
                         available={product.available}
                       />
@@ -129,7 +131,7 @@ export default function Products() {
               {(!filteredProducts || filteredProducts.length === 0) && (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground text-lg">
-                    No products found in this category.
+                    Aucun produit trouvé dans cette catégorie.
                   </p>
                 </div>
               )}

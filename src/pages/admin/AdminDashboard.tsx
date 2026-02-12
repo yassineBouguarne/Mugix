@@ -6,12 +6,12 @@ import {
   Pencil,
   Trash2,
   LogOut,
-  Droplets,
   LayoutDashboard,
   Check,
   X,
   Loader2,
   FolderOpen,
+  Mail,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -78,8 +78,8 @@ export default function AdminDashboard() {
         navigate("/admin/login");
       } else if (!isAdmin) {
         toast({
-          title: "Access Denied",
-          description: "You don't have admin privileges.",
+          title: "Accès Refusé",
+          description: "Vous n'avez pas les privilèges administrateur.",
           variant: "destructive",
         });
         navigate("/");
@@ -91,13 +91,13 @@ export default function AdminDashboard() {
     try {
       await deleteProduct.mutateAsync(id);
       toast({
-        title: "Product Deleted",
-        description: `"${name}" has been removed.`,
+        title: "Produit Supprimé",
+        description: `"${name}" a été supprimé.`,
       });
     } catch (error) {
       toast({
-        title: "Delete Failed",
-        description: "Failed to delete product. Please try again.",
+        title: "Échec de la Suppression",
+        description: "Impossible de supprimer le produit. Veuillez réessayer.",
         variant: "destructive",
       });
     }
@@ -106,8 +106,8 @@ export default function AdminDashboard() {
   const handleAddCategory = async () => {
     if (!newCategoryName.trim()) {
       toast({
-        title: "Validation Error",
-        description: "Category name is required.",
+        title: "Erreur de Validation",
+        description: "Le nom de la catégorie est requis.",
         variant: "destructive",
       });
       return;
@@ -120,16 +120,16 @@ export default function AdminDashboard() {
         description: newCategoryDescription.trim() || null,
       });
       toast({
-        title: "Category Created",
-        description: `"${newCategoryName}" has been added.`,
+        title: "Catégorie Créée",
+        description: `"${newCategoryName}" a été ajoutée.`,
       });
       setNewCategoryName("");
       setNewCategoryDescription("");
       setCategoryDialogOpen(false);
     } catch (error) {
       toast({
-        title: "Creation Failed",
-        description: "Failed to create category. Please try again.",
+        title: "Échec de la Création",
+        description: "Impossible de créer la catégorie. Veuillez réessayer.",
         variant: "destructive",
       });
     } finally {
@@ -141,13 +141,14 @@ export default function AdminDashboard() {
     try {
       await deleteCategory.mutateAsync(id);
       toast({
-        title: "Category Deleted",
-        description: `"${name}" has been removed.`,
+        title: "Catégorie Supprimée",
+        description: `"${name}" a été supprimée.`,
       });
     } catch (error) {
       toast({
-        title: "Delete Failed",
-        description: "Failed to delete category. Please try again.",
+        title: "Échec de la Suppression",
+        description:
+          "Impossible de supprimer la catégorie. Veuillez réessayer.",
         variant: "destructive",
       });
     }
@@ -180,9 +181,8 @@ export default function AdminDashboard() {
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 bottom-0 w-64 bg-sidebar text-sidebar-foreground border-r border-sidebar-border hidden lg:block">
         <div className="p-6">
-          <Link to="/" className="flex items-center gap-2">
-            <Droplets className="h-8 w-8 text-sidebar-primary" />
-            <span className="font-display text-xl font-bold">Mugix Admin</span>
+          <Link to="/">
+            <img src="/assets/mugix-logo.png" alt="Mugix" className="h-12 brightness-0 invert" />
           </Link>
         </div>
 
@@ -192,14 +192,21 @@ export default function AdminDashboard() {
             className="flex items-center gap-3 px-4 py-3 rounded-lg bg-sidebar-accent text-sidebar-accent-foreground"
           >
             <LayoutDashboard className="h-5 w-5" />
-            Dashboard
+            Tableau de Bord
           </Link>
           <Link
             to="/admin/products/new"
             className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-sidebar-accent transition-colors"
           >
             <Plus className="h-5 w-5" />
-            Add Product
+            Ajouter un Produit
+          </Link>
+          <Link
+            to="/admin/messages"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-sidebar-accent transition-colors"
+          >
+            <Mail className="h-5 w-5" />
+            Messages
           </Link>
         </nav>
 
@@ -213,7 +220,7 @@ export default function AdminDashboard() {
             onClick={handleSignOut}
           >
             <LogOut className="h-5 w-5" />
-            Sign Out
+            Déconnexion
           </Button>
         </div>
       </aside>
@@ -222,9 +229,8 @@ export default function AdminDashboard() {
       <main className="lg:ml-64 p-6 lg:p-8">
         {/* Mobile Header */}
         <div className="lg:hidden flex items-center justify-between mb-6">
-          <Link to="/" className="flex items-center gap-2">
-            <Droplets className="h-6 w-6 text-primary" />
-            <span className="font-display text-lg font-bold">Mugix Admin</span>
+          <Link to="/">
+            <img src="/assets/mugix-logo.png" alt="Mugix" className="h-10" />
           </Link>
           <Button variant="outline" size="sm" onClick={handleSignOut}>
             <LogOut className="h-4 w-4" />
@@ -235,14 +241,16 @@ export default function AdminDashboard() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
             <h1 className="font-display text-3xl font-bold text-foreground">
-              Dashboard
+              Tableau de Bord
             </h1>
-            <p className="text-muted-foreground">Manage your products and categories</p>
+            <p className="text-muted-foreground">
+              Gérez vos produits et catégories
+            </p>
           </div>
           <Button asChild>
             <Link to="/admin/products/new">
               <Plus className="h-4 w-4 mr-2" />
-              Add Product
+              Ajouter un Produit
             </Link>
           </Button>
         </div>
@@ -252,7 +260,7 @@ export default function AdminDashboard() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Total Products
+                Total Produits
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -264,7 +272,7 @@ export default function AdminDashboard() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Available
+                Disponibles
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -276,7 +284,7 @@ export default function AdminDashboard() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Out of Stock
+                En Rupture
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -288,7 +296,7 @@ export default function AdminDashboard() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Categories
+                Catégories
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -304,28 +312,31 @@ export default function AdminDashboard() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <FolderOpen className="h-5 w-5" />
-              Categories
+              Catégories
             </CardTitle>
-            <Dialog open={categoryDialogOpen} onOpenChange={setCategoryDialogOpen}>
+            <Dialog
+              open={categoryDialogOpen}
+              onOpenChange={setCategoryDialogOpen}
+            >
               <DialogTrigger asChild>
                 <Button size="sm">
                   <Plus className="h-4 w-4 mr-2" />
-                  Add Category
+                  Ajouter une Catégorie
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Add New Category</DialogTitle>
+                  <DialogTitle>Ajouter une Nouvelle Catégorie</DialogTitle>
                   <DialogDescription>
-                    Create a new category for your products.
+                    Créez une nouvelle catégorie pour vos produits.
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
-                    <Label htmlFor="categoryName">Name *</Label>
+                    <Label htmlFor="categoryName">Nom *</Label>
                     <Input
                       id="categoryName"
-                      placeholder="e.g., 500ml"
+                      placeholder="ex. Bouteilles"
                       value={newCategoryName}
                       onChange={(e) => setNewCategoryName(e.target.value)}
                     />
@@ -334,9 +345,11 @@ export default function AdminDashboard() {
                     <Label htmlFor="categoryDescription">Description</Label>
                     <Input
                       id="categoryDescription"
-                      placeholder="e.g., Small bottles"
+                      placeholder="ex. Bouteilles isothermes"
                       value={newCategoryDescription}
-                      onChange={(e) => setNewCategoryDescription(e.target.value)}
+                      onChange={(e) =>
+                        setNewCategoryDescription(e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -345,13 +358,16 @@ export default function AdminDashboard() {
                     variant="outline"
                     onClick={() => setCategoryDialogOpen(false)}
                   >
-                    Cancel
+                    Annuler
                   </Button>
-                  <Button onClick={handleAddCategory} disabled={isAddingCategory}>
+                  <Button
+                    onClick={handleAddCategory}
+                    disabled={isAddingCategory}
+                  >
                     {isAddingCategory && (
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                     )}
-                    Add Category
+                    Ajouter la Catégorie
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -367,7 +383,7 @@ export default function AdminDashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Name</TableHead>
+                      <TableHead>Nom</TableHead>
                       <TableHead>Description</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
@@ -390,21 +406,27 @@ export default function AdminDashboard() {
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>Delete Category</AlertDialogTitle>
+                                <AlertDialogTitle>
+                                  Supprimer la Catégorie
+                                </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Are you sure you want to delete "{category.name}"?
-                                  Products in this category will lose their category.
+                                  Êtes-vous sûr de vouloir supprimer "
+                                  {category.name}" ? Les produits de cette
+                                  catégorie perdront leur catégorie.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogCancel>Annuler</AlertDialogCancel>
                                 <AlertDialogAction
                                   onClick={() =>
-                                    handleDeleteCategory(category.id, category.name)
+                                    handleDeleteCategory(
+                                      category.id,
+                                      category.name,
+                                    )
                                   }
                                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                 >
-                                  Delete
+                                  Supprimer
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -418,9 +440,11 @@ export default function AdminDashboard() {
             ) : (
               <div className="text-center py-8">
                 <FolderOpen className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
-                <p className="text-muted-foreground mb-4">No categories yet</p>
+                <p className="text-muted-foreground mb-4">
+                  Aucune catégorie pour le moment
+                </p>
                 <Button onClick={() => setCategoryDialogOpen(true)}>
-                  Add Your First Category
+                  Ajouter Votre Première Catégorie
                 </Button>
               </div>
             )}
@@ -432,7 +456,7 @@ export default function AdminDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Package className="h-5 w-5" />
-              Products
+              Produits
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -445,10 +469,10 @@ export default function AdminDashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Product</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead>Produit</TableHead>
+                      <TableHead>Catégorie</TableHead>
+                      <TableHead>Prix</TableHead>
+                      <TableHead>Statut</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -457,34 +481,44 @@ export default function AdminDashboard() {
                       <TableRow key={product.id}>
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-water-gradient flex items-center justify-center flex-shrink-0 overflow-hidden">
-                              {product.image_url ? (
+                            <div className="w-10 h-10 rounded-lg bg-nature-gradient flex items-center justify-center flex-shrink-0 overflow-hidden">
+                              {product.images?.[0] || product.image_url ? (
                                 <img
-                                  src={getImageUrl(product.image_url) || ""}
+                                  src={
+                                    getImageUrl(
+                                      product.images?.[0] || product.image_url,
+                                    ) || ""
+                                  }
                                   alt={product.name}
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <Droplets className="h-5 w-5 text-primary/50" />
+                                <Package className="h-5 w-5 text-primary/50" />
                               )}
                             </div>
                             <span className="font-medium">{product.name}</span>
                           </div>
                         </TableCell>
+                        <TableCell>{product.category?.name || "-"}</TableCell>
                         <TableCell>
-                          {product.category?.name || "-"}
+                          {Number(product.price).toFixed(2)} DH
                         </TableCell>
-                        <TableCell>${Number(product.price).toFixed(2)}</TableCell>
                         <TableCell>
                           {product.available ? (
-                            <Badge variant="outline" className="text-primary border-primary">
+                            <Badge
+                              variant="outline"
+                              className="text-primary border-primary"
+                            >
                               <Check className="h-3 w-3 mr-1" />
-                              Available
+                              Disponible
                             </Badge>
                           ) : (
-                            <Badge variant="outline" className="text-destructive border-destructive">
+                            <Badge
+                              variant="outline"
+                              className="text-destructive border-destructive"
+                            >
                               <X className="h-3 w-3 mr-1" />
-                              Unavailable
+                              Indisponible
                             </Badge>
                           )}
                         </TableCell>
@@ -503,19 +537,27 @@ export default function AdminDashboard() {
                               </AlertDialogTrigger>
                               <AlertDialogContent>
                                 <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete Product</AlertDialogTitle>
+                                  <AlertDialogTitle>
+                                    Supprimer le Produit
+                                  </AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    Are you sure you want to delete "{product.name}"?
-                                    This action cannot be undone.
+                                    Êtes-vous sûr de vouloir supprimer "
+                                    {product.name}" ? Cette action est
+                                    irréversible.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogCancel>Annuler</AlertDialogCancel>
                                   <AlertDialogAction
-                                    onClick={() => handleDeleteProduct(product.id, product.name)}
+                                    onClick={() =>
+                                      handleDeleteProduct(
+                                        product.id,
+                                        product.name,
+                                      )
+                                    }
                                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                   >
-                                    Delete
+                                    Supprimer
                                   </AlertDialogAction>
                                 </AlertDialogFooter>
                               </AlertDialogContent>
@@ -530,9 +572,13 @@ export default function AdminDashboard() {
             ) : (
               <div className="text-center py-12">
                 <Package className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
-                <p className="text-muted-foreground mb-4">No products yet</p>
+                <p className="text-muted-foreground mb-4">
+                  Aucun produit pour le moment
+                </p>
                 <Button asChild>
-                  <Link to="/admin/products/new">Add Your First Product</Link>
+                  <Link to="/admin/products/new">
+                    Ajouter Votre Premier Produit
+                  </Link>
                 </Button>
               </div>
             )}

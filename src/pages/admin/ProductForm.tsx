@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { ArrowLeft, Loader2, Upload, X, Droplets } from "lucide-react";
+import { ArrowLeft, Loader2, Upload, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -22,9 +23,17 @@ import {
   useUpdateProduct,
 } from "@/hooks/useProducts";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 const SERVER_URL = API_URL.replace("/api", "");
+
+interface ImageItem {
+  id: string;
+  url: string | null;
+  file: File | null;
+  preview: string;
+}
 
 export default function ProductForm() {
   const { id } = useParams<{ id: string }>();
@@ -42,11 +51,8 @@ export default function ProductForm() {
   const [price, setPrice] = useState("");
   const [categoryId, setCategoryId] = useState<string>("");
   const [available, setAvailable] = useState(true);
-  const [imageUrl, setImageUrl] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageItems, setImageItems] = useState<ImageItem[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isAdmin) {
@@ -61,58 +67,72 @@ export default function ProductForm() {
       setPrice(String(existingProduct.price));
       setCategoryId(existingProduct.category_id || "");
       setAvailable(existingProduct.available);
-      setImageUrl(existingProduct.image_url || "");
-      if (existingProduct.image_url) {
-        // Handle both relative and absolute URLs
-        const previewUrl = existingProduct.image_url.startsWith("http")
-          ? existingProduct.image_url
-          : `${SERVER_URL}${existingProduct.image_url}`;
-        setImagePreview(previewUrl);
-      }
+
+      const existingImages: ImageItem[] = (existingProduct.images || []).map((imgUrl, index) => ({
+        id: `existing-${index}-${Date.now()}`,
+        url: imgUrl,
+        file: null,
+        preview: imgUrl.startsWith("http") ? imgUrl : `${SERVER_URL}${imgUrl}`,
+      }));
+      setImageItems(existingImages);
     }
   }, [existingProduct]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Validate file type
-      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+  const handleImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+
+    const validFiles = files.filter(file => {
       if (!allowedTypes.includes(file.type)) {
         toast({
-          title: "Invalid File Type",
-          description: "Please upload a JPEG, PNG, GIF or WebP image.",
+          title: "Type de Fichier Invalide",
+          description: `"${file.name}" n'est pas un format d'image supporté.`,
           variant: "destructive",
         });
-        return;
+        return false;
       }
-
-      // Validate file size (10MB)
       if (file.size > 10 * 1024 * 1024) {
         toast({
-          title: "File Too Large",
-          description: "Maximum file size is 10MB.",
+          title: "Fichier Trop Volumineux",
+          description: `"${file.name}" dépasse la limite de 10 Mo.`,
           variant: "destructive",
         });
-        return;
+        return false;
       }
+      return true;
+    });
 
-      setImageFile(file);
+    validFiles.forEach(file => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+        const newItem: ImageItem = {
+          id: `new-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          url: null,
+          file: file,
+          preview: reader.result as string,
+        };
+        setImageItems(prev => [...prev, newItem]);
       };
       reader.readAsDataURL(file);
-    }
+    });
+
+    e.target.value = "";
   };
 
-  const removeImage = () => {
-    setImageFile(null);
-    setImagePreview(null);
-    setImageUrl("");
+  const removeImage = (id: string) => {
+    setImageItems(prev => prev.filter(item => item.id !== id));
+  };
+
+  const moveImage = (fromIndex: number, toIndex: number) => {
+    setImageItems(prev => {
+      const updated = [...prev];
+      const [moved] = updated.splice(fromIndex, 1);
+      updated.splice(toIndex, 0, moved);
+      return updated;
+    });
   };
 
   const uploadImage = async (file: File): Promise<string | null> => {
-    setIsUploading(true);
     try {
       const formData = new FormData();
       formData.append("image", file);
@@ -128,12 +148,10 @@ export default function ProductForm() {
       }
 
       const data = await response.json();
-      return data.url; // Returns relative URL like "/uploads/product-123.jpg"
+      return data.url;
     } catch (error) {
       console.error("Upload error:", error);
       return null;
-    } finally {
-      setIsUploading(false);
     }
   };
 
@@ -142,8 +160,8 @@ export default function ProductForm() {
 
     if (!name.trim()) {
       toast({
-        title: "Validation Error",
-        description: "Product name is required.",
+        title: "Erreur de Validation",
+        description: "Le nom du produit est requis.",
         variant: "destructive",
       });
       return;
@@ -151,8 +169,8 @@ export default function ProductForm() {
 
     if (!price || isNaN(Number(price)) || Number(price) <= 0) {
       toast({
-        title: "Validation Error",
-        description: "Please enter a valid price.",
+        title: "Erreur de Validation",
+        description: "Veuillez entrer un prix valide.",
         variant: "destructive",
       });
       return;
@@ -161,19 +179,22 @@ export default function ProductForm() {
     setIsSubmitting(true);
 
     try {
-      let finalImageUrl = imageUrl;
+      const finalImageUrls: string[] = [];
 
-      // Upload image if a new file was selected
-      if (imageFile) {
-        const uploadedUrl = await uploadImage(imageFile);
-        if (uploadedUrl) {
-          finalImageUrl = uploadedUrl;
-        } else {
-          toast({
-            title: "Upload Failed",
-            description: "Failed to upload image. Product will be saved without image.",
-            variant: "destructive",
-          });
+      for (const item of imageItems) {
+        if (item.url) {
+          finalImageUrls.push(item.url);
+        } else if (item.file) {
+          const uploadedUrl = await uploadImage(item.file);
+          if (uploadedUrl) {
+            finalImageUrls.push(uploadedUrl);
+          } else {
+            toast({
+              title: "Échec du Téléchargement",
+              description: `Impossible de télécharger "${item.file.name}". Il sera ignoré.`,
+              variant: "destructive",
+            });
+          }
         }
       }
 
@@ -183,20 +204,21 @@ export default function ProductForm() {
         price: Number(price),
         category_id: categoryId || null,
         available,
-        image_url: finalImageUrl || null,
+        images: finalImageUrls,
+        image_url: finalImageUrls.length > 0 ? finalImageUrls[0] : null,
       };
 
       if (isEditing && id) {
         await updateProduct.mutateAsync({ id, ...productData });
         toast({
-          title: "Product Updated",
-          description: `"${name}" has been updated.`,
+          title: "Produit Mis à Jour",
+          description: `"${name}" a été mis à jour.`,
         });
       } else {
         await createProduct.mutateAsync(productData);
         toast({
-          title: "Product Created",
-          description: `"${name}" has been added.`,
+          title: "Produit Créé",
+          description: `"${name}" a été ajouté.`,
         });
       }
 
@@ -204,8 +226,8 @@ export default function ProductForm() {
     } catch (error) {
       console.error("Submit error:", error);
       toast({
-        title: "Error",
-        description: "Failed to save product. Please try again.",
+        title: "Erreur",
+        description: "Impossible de sauvegarder le produit. Veuillez réessayer.",
         variant: "destructive",
       });
     } finally {
@@ -235,10 +257,10 @@ export default function ProductForm() {
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Dashboard
+            Retour au Tableau de Bord
           </Link>
           <h1 className="font-display text-3xl font-bold text-foreground">
-            {isEditing ? "Edit Product" : "Add New Product"}
+            {isEditing ? "Modifier le Produit" : "Ajouter un Nouveau Produit"}
           </h1>
         </div>
 
@@ -246,48 +268,74 @@ export default function ProductForm() {
           {/* Image Upload */}
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle>Product Image</CardTitle>
+              <CardTitle>Images du Produit</CardTitle>
             </CardHeader>
             <CardContent>
-              {imagePreview ? (
-                <div className="relative w-48 h-48 mx-auto">
-                  <img
-                    src={imagePreview}
-                    alt="Product preview"
-                    className="w-full h-full object-cover rounded-lg"
-                    onError={() => setImagePreview(null)}
-                  />
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="absolute -top-2 -right-2 w-8 h-8 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center hover:bg-destructive/90"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                  {isUploading && (
-                    <div className="absolute inset-0 bg-background/80 flex items-center justify-center rounded-lg">
-                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary hover:bg-muted/50 transition-colors">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Upload className="h-12 w-12 text-muted-foreground/50 mb-3" />
-                    <p className="mb-2 text-sm text-muted-foreground">
-                      <span className="font-semibold">Click to upload</span> or drag and drop
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      PNG, JPG, GIF, WebP up to 10MB
-                    </p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {imageItems.map((item, index) => (
+                  <div key={item.id} className="relative group aspect-square">
+                    <img
+                      src={item.preview}
+                      alt={`Product image ${index + 1}`}
+                      className={cn(
+                        "w-full h-full object-cover rounded-lg border",
+                        index === 0 && "ring-2 ring-primary"
+                      )}
+                      onError={() => removeImage(item.id)}
+                    />
+                    {index === 0 && (
+                      <Badge className="absolute top-1 left-1 text-xs">Principal</Badge>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => removeImage(item.id)}
+                      className="absolute -top-2 -right-2 w-6 h-6 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                    {imageItems.length > 1 && (
+                      <div className="absolute bottom-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => moveImage(index, index - 1)}
+                            className="w-6 h-6 bg-background/80 backdrop-blur rounded flex items-center justify-center hover:bg-background"
+                          >
+                            <ChevronLeft className="h-3 w-3" />
+                          </button>
+                        )}
+                        {index < imageItems.length - 1 && (
+                          <button
+                            type="button"
+                            onClick={() => moveImage(index, index + 1)}
+                            className="w-6 h-6 bg-background/80 backdrop-blur rounded flex items-center justify-center hover:bg-background"
+                          >
+                            <ChevronRight className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
+                ))}
+
+                <label className="flex flex-col items-center justify-center aspect-square border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary hover:bg-muted/50 transition-colors">
+                  <Upload className="h-8 w-8 text-muted-foreground/50 mb-2" />
+                  <p className="text-xs text-muted-foreground text-center px-2">
+                    Ajouter une Image
+                  </p>
                   <input
                     type="file"
                     className="hidden"
                     accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                    onChange={handleImageChange}
+                    multiple
+                    onChange={handleImagesChange}
                   />
                 </label>
+              </div>
+              {imageItems.length > 0 && (
+                <p className="text-xs text-muted-foreground mt-3">
+                  La première image sera utilisée comme miniature principale du produit. Utilisez les flèches pour réorganiser.
+                </p>
               )}
             </CardContent>
           </Card>
@@ -295,14 +343,14 @@ export default function ProductForm() {
           {/* Product Details */}
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle>Product Details</CardTitle>
+              <CardTitle>Détails du Produit</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="name">Product Name *</Label>
+                <Label htmlFor="name">Nom du Produit *</Label>
                 <Input
                   id="name"
-                  placeholder="e.g., Mugix Pure 500ml"
+                  placeholder="ex. Bouteille Éco 500ml"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -313,7 +361,7 @@ export default function ProductForm() {
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
-                  placeholder="Describe your product..."
+                  placeholder="Décrivez votre produit..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={4}
@@ -322,7 +370,7 @@ export default function ProductForm() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="price">Price ($) *</Label>
+                  <Label htmlFor="price">Prix (DH) *</Label>
                   <Input
                     id="price"
                     type="number"
@@ -336,10 +384,10 @@ export default function ProductForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="category">Category</Label>
+                  <Label htmlFor="category">Catégorie</Label>
                   <Select value={categoryId} onValueChange={setCategoryId}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
+                      <SelectValue placeholder="Sélectionner une catégorie" />
                     </SelectTrigger>
                     <SelectContent>
                       {categories?.map((category) => (
@@ -354,9 +402,9 @@ export default function ProductForm() {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="available">Available for Order</Label>
+                  <Label htmlFor="available">Disponible à la Commande</Label>
                   <p className="text-sm text-muted-foreground">
-                    Toggle off to mark as out of stock
+                    Désactiver pour marquer comme rupture de stock
                   </p>
                 </div>
                 <Switch
@@ -376,11 +424,11 @@ export default function ProductForm() {
               className="flex-1"
               onClick={() => navigate("/admin")}
             >
-              Cancel
+              Annuler
             </Button>
-            <Button type="submit" className="flex-1" disabled={isSubmitting || isUploading}>
-              {(isSubmitting || isUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isEditing ? "Update Product" : "Create Product"}
+            <Button type="submit" className="flex-1" disabled={isSubmitting}>
+              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isEditing ? "Mettre à Jour" : "Créer le Produit"}
             </Button>
           </div>
         </form>

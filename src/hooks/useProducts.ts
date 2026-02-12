@@ -8,6 +8,7 @@ export interface Product {
   description: string | null;
   price: number;
   image_url: string | null;
+  images: string[];
   category_id: string | null;
   available: boolean;
   createdAt: string;
@@ -24,6 +25,16 @@ export interface Category {
   name: string;
   description: string | null;
   created_at: string;
+}
+
+export interface Contact {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string | null;
+  message: string;
+  createdAt: string;
 }
 
 export function useProducts() {
@@ -191,6 +202,64 @@ export function useDeleteCategory() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+  });
+}
+
+export function useContacts() {
+  return useQuery({
+    queryKey: ["contacts"],
+    queryFn: async () => {
+      const token = localStorage.getItem("mugix_token");
+      const response = await fetch(`${API_URL}/contacts`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch contacts");
+      }
+      return response.json() as Promise<Contact[]>;
+    },
+  });
+}
+
+export function useCreateContact() {
+  return useMutation({
+    mutationFn: async (contact: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      phone?: string;
+      message: string;
+    }) => {
+      const response = await fetch(`${API_URL}/contacts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(contact),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
+      return response.json();
+    },
+  });
+}
+
+export function useDeleteContact() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const token = localStorage.getItem("mugix_token");
+      const response = await fetch(`${API_URL}/contacts/${id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete contact");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
     },
   });
 }

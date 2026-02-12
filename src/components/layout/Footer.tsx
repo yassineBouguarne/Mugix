@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Droplets, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -8,27 +8,30 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="space-y-4">
-            <Link to="/" className="flex items-center gap-2">
-              <Droplets className="h-8 w-8 text-primary" />
-              <span className="font-display text-2xl font-bold">Mugix</span>
+            <Link to="/">
+              <img
+                src="/assets/mugix-logo.png"
+                alt="Mugix"
+                className="h-14 brightness-0 invert"
+              />
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Premium mountain spring water, pure and refreshing. Hydration
-              crafted by nature, delivered to your door.
+              Bouteilles réutilisables et mugs design éco-responsables. Des
+              produits durables et stylés, livrés à votre porte.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
             <h3 className="font-display text-lg font-semibold mb-4">
-              Quick Links
+              Liens Rapides
             </h3>
             <ul className="space-y-3">
               {[
-                { href: "/", label: "Home" },
-                { href: "/products", label: "Products" },
-                { href: "/delivery", label: "Delivery Info" },
-                { href: "/contact", label: "Contact Us" },
+                { href: "/", label: "Accueil" },
+                { href: "/products", label: "Produits" },
+                { href: "/about", label: "À Propos" },
+                { href: "/contact", label: "Nous Contacter" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -44,11 +47,13 @@ export function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="font-display text-lg font-semibold mb-4">Contact</h3>
+            <h3 className="font-display text-lg font-semibold mb-4">
+              Nous Contacter
+            </h3>
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-muted-foreground text-sm">
                 <Phone className="h-4 w-4 text-primary" />
-                +1 (+212679545622) 123-4567
+                +212679545622
               </li>
               <li className="flex items-center gap-3 text-muted-foreground text-sm">
                 <Mail className="h-4 w-4 text-primary" />
@@ -66,22 +71,22 @@ export function Footer() {
           {/* Newsletter */}
           <div>
             <h3 className="font-display text-lg font-semibold mb-4">
-              Stay Hydrated
+              Restez Informé
             </h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Get updates on new products and special offers.
+              Recevez les dernières nouveautés et offres spéciales.
             </p>
             <form className="flex gap-2">
               <input
                 type="email"
-                placeholder="Your email"
+                placeholder="Votre email"
                 className="flex-1 px-4 py-2 bg-background/10 border border-background/20 rounded-lg text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <button
                 type="submit"
                 className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
               >
-                Join
+                Rejoindre
               </button>
             </form>
           </div>
@@ -91,20 +96,20 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-background/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-muted-foreground text-sm">
-              © {new Date().getFullYear()} Mugix. All rights reserved.
+              © {new Date().getFullYear()} Mugix. Tous droits réservés.
             </p>
             <div className="flex gap-6">
               <Link
                 to="#"
                 className="text-muted-foreground text-sm hover:text-primary transition-colors"
               >
-                Privacy Policy
+                Politique de Confidentialité
               </Link>
               <Link
                 to="#"
                 className="text-muted-foreground text-sm hover:text-primary transition-colors"
               >
-                Terms of Service
+                Conditions d'Utilisation
               </Link>
             </div>
           </div>

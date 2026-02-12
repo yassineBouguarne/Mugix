@@ -56,13 +56,21 @@ export const getProductById = async (req, res) => {
 // POST /api/products - Créer un produit
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, price, image_url, category_id, available } = req.body;
+    const { name, description, price, image_url, images, category_id, available } = req.body;
+
+    // Support both old (image_url) and new (images) format
+    let productImages = [];
+    if (images && Array.isArray(images) && images.length > 0) {
+      productImages = images;
+    } else if (image_url) {
+      productImages = [image_url];
+    }
 
     const product = new Product({
       name,
       description,
       price,
-      image_url,
+      images: productImages,
       category_id: category_id || null,
       available: available !== undefined ? available : true
     });
@@ -91,11 +99,19 @@ export const createProduct = async (req, res) => {
 // PUT /api/products/:id - Mettre à jour un produit
 export const updateProduct = async (req, res) => {
   try {
-    const { name, description, price, image_url, category_id, available } = req.body;
+    const { name, description, price, image_url, images, category_id, available } = req.body;
+
+    // Support both old (image_url) and new (images) format
+    const updateData = { name, description, price, category_id, available };
+    if (images !== undefined) {
+      updateData.images = Array.isArray(images) ? images : [];
+    } else if (image_url !== undefined) {
+      updateData.images = image_url ? [image_url] : [];
+    }
 
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      { name, description, price, image_url, category_id, available },
+      updateData,
       { new: true, runValidators: true }
     ).populate('category_id', 'id name description');
 
