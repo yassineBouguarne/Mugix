@@ -27,7 +27,7 @@ export const products: Product[] = [
     name: "Mug Ember Noir",
     description:
       "Un mug en céramique au fini dégradé noir et argenté, alliant élégance et robustesse. Sa forme arrondie offre une prise en main confortable, idéal pour savourer votre café ou thé préféré.",
-    price: 189,
+    price: 89,
     image_url: "/assets/products-images/mug-easer.png",
     images: [
       "/assets/products-images/mug-easer.png",
@@ -69,7 +69,7 @@ export const products: Product[] = [
     name: "Travel Mug Bronze",
     description:
       "Mug de voyage en acier inoxydable finition cuivre brossé avec couvercle flip-top étanche. Compact et résistant, il vous accompagne partout avec style et praticité.",
-    price: 299,
+    price: 149,
     image_url: "/assets/products-images/p1-easer.png",
     images: [
       "/assets/products-images/p1-easer.png",
