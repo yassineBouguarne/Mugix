@@ -53,6 +53,15 @@ export default function Contact() {
         phone: phone || undefined,
         message,
       });
+
+      const subject = encodeURIComponent(
+        `Message de ${firstName} ${lastName} – Mugix`,
+      );
+      const body = encodeURIComponent(
+        `Prénom : ${firstName}\nNom : ${lastName}\nEmail : ${email}${phone ? `\nTéléphone : ${phone}` : ""}\n\nMessage :\n${message}`,
+      );
+      window.location.href = `mailto:mugix.ma@gmail.com?subject=${subject}&body=${body}`;
+
       toast({
         title: "Message Envoyé",
         description: "Merci pour votre message ! Nous vous répondrons bientôt.",
@@ -133,7 +142,7 @@ export default function Contact() {
                         Vous préférez WhatsApp ?
                       </h3>
                       <p className="text-primary-foreground/80 text-sm">
-                        Discutez directement avec nous pour des réponses rapides
+                        Disponibles 7j/7 — obtenez une réponse personnalisée en quelques minutes.
                       </p>
                     </div>
                   </div>

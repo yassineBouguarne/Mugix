@@ -20,7 +20,6 @@ export function Footer() {
               produits durables et stylés, livrés à votre porte.
             </p>
           </div>
-
           {/* Quick Links */}
           <div>
             <h3 className="font-display text-lg font-semibold mb-4">
@@ -44,7 +43,6 @@ export function Footer() {
               ))}
             </ul>
           </div>
-
           {/* Contact Info */}
           <div>
             <h3 className="font-display text-lg font-semibold mb-4">
@@ -61,29 +59,6 @@ export function Footer() {
               </li>
             </ul>
           </div>
-
-          {/* Newsletter */}
-          <div>
-            <h3 className="font-display text-lg font-semibold mb-4">
-              Restez Informé
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Recevez les dernières nouveautés et offres spéciales.
-            </p>
-            <form className="flex gap-2">
-              <input
-                type="email"
-                placeholder="Votre email"
-                className="flex-1 px-4 py-2 bg-background/10 border border-background/20 rounded-lg text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <button
-                type="submit"
-                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
-              >
-                Rejoindre
-              </button>
-            </form>
-          </div>
         </div>
 
         {/* Bottom Bar */}
@@ -92,20 +67,6 @@ export function Footer() {
             <p className="text-muted-foreground text-sm">
               © {new Date().getFullYear()} Mugix. Tous droits réservés.
             </p>
-            <div className="flex gap-6">
-              <Link
-                to="#"
-                className="text-muted-foreground text-sm hover:text-primary transition-colors"
-              >
-                Politique de Confidentialité
-              </Link>
-              <Link
-                to="#"
-                className="text-muted-foreground text-sm hover:text-primary transition-colors"
-              >
-                Conditions d'Utilisation
-              </Link>
-            </div>
           </div>
         </div>
       </div>
