@@ -59,12 +59,6 @@ export function Footer() {
                 <Mail className="h-4 w-4 text-primary" />
                 mugix.ma@gmail.com
               </li>
-              <li className="flex items-start gap-3 text-muted-foreground text-sm">
-                <MapPin className="h-4 w-4 text-primary mt-0.5" />
-                123 Crystal Spring Road,
-                <br />
-                Mountain Valley, CA 90210
-              </li>
             </ul>
           </div>
 

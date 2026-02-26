@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { MessageCircle, ArrowLeft, Package, Check } from "lucide-react";
+import { MessageCircle, Mail, ArrowLeft, Package, Check } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -85,6 +85,14 @@ export default function ProductDetail() {
     `Bonjour ! Je souhaite commander : ${product.name} – Prix : ${Number(product.price).toFixed(2)} DH – Quantité : 1 – Lien : ${window.location.href}`,
   );
   const whatsappLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${whatsappMessage}`;
+
+  const emailSubject = encodeURIComponent(
+    `Commande : ${product.name} – ${Number(product.price).toFixed(2)} DH`,
+  );
+  const emailBody = encodeURIComponent(
+    `Bonjour,\n\nJe souhaite passer une commande pour le produit suivant :\n\nProduit : ${product.name}\nPrix unitaire : ${Number(product.price).toFixed(2)} DH\nQuantité souhaitée : \nLien : ${window.location.href}\n\nMerci de me contacter pour confirmer la commande et les modalités de livraison.\n\nCordialement,`,
+  );
+  const emailLink = `mailto:mugix.ma@gmail.com?subject=${emailSubject}&body=${emailBody}`;
 
   const imageUrls = getImageUrls(product.images);
   const hasImages = imageUrls.length > 0;
@@ -214,8 +222,8 @@ export default function ProductDetail() {
                 </p>
               </div>
 
-              {/* Order Button */}
-              <div className="pt-6 border-t border-border">
+              {/* Order Buttons */}
+              <div className="pt-6 border-t border-border flex flex-col sm:flex-row gap-3">
                 <Button
                   asChild
                   size="lg"
@@ -231,10 +239,19 @@ export default function ProductDetail() {
                     Commander sur WhatsApp
                   </a>
                 </Button>
-                <p className="text-sm text-muted-foreground mt-4">
-                  Cliquez pour ouvrir WhatsApp avec les détails de votre
-                  commande pré-remplis.
-                </p>
+
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  disabled={!product.available}
+                  className="w-full sm:w-auto gap-2"
+                >
+                  <a href={emailLink}>
+                    <Mail className="h-5 w-5" />
+                    Commander par Email
+                  </a>
+                </Button>
               </div>
             </div>
           </div>
