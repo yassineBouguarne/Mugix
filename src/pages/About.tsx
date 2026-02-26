@@ -1,4 +1,4 @@
-import { Recycle, Palette, Heart, Users, Leaf, Award } from "lucide-react";
+import { Recycle, Palette, Heart, Leaf, Award } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -29,12 +29,6 @@ const values = [
   },
 ];
 
-const stats = [
-  { value: "100%", label: "Matériaux Durables" },
-  { value: "50+", label: "Designs Uniques" },
-  { value: "24/7", label: "Service Client" },
-  { value: "1000+", label: "Clients Satisfaits" },
-];
 
 export default function About() {
   return (
@@ -47,33 +41,32 @@ export default function About() {
               À Propos de Mugix
             </h1>
             <p className="text-lg text-muted-foreground">
-              Découvrez notre histoire, notre mission et notre engagement envers
-              un design éco-responsable.
+              Découvrez notre vision, nos valeurs et notre engagement envers
+              des produits de qualité qui allient style et durabilité.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Notre Histoire */}
+      {/* Notre Vision */}
       <section className="py-16 lg:py-24 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-6">
-              Notre Histoire
+              Notre Vision
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-              Née d'une envie de proposer des alternatives durables aux objets du
-              quotidien, Mugix est le fruit d'une passion pour le design et
-              l'éco-responsabilité. Notre aventure a commencé avec une conviction
-              simple : chacun mérite des produits beaux, fonctionnels et
-              respectueux de l'environnement.
+              Mugix est une marque jeune et ambitieuse, née d'une conviction
+              simple : pourquoi se contenter d'un mug ordinaire quand on peut
+              avoir quelque chose qui vous ressemble ? Nous avons créé Mugix
+              pour proposer des bouteilles et mugs au design soigné, pensés pour
+              le quotidien de ceux qui ne font pas de compromis sur le style.
             </p>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Depuis nos débuts, nous avons consacré notre énergie à créer des
-              bouteilles réutilisables et des mugs au design unique, en
-              sélectionnant les meilleurs matériaux durables. Chaque produit
-              Mugix raconte l'histoire d'un engagement envers la créativité et
-              la planète.
+              Chaque produit de notre collection est sélectionné avec soin —
+              des matériaux durables, une finition premium et un design qui
+              attire le regard. Que ce soit sur votre bureau, en déplacement ou
+              chez vous, un Mugix fait la différence.
             </p>
           </div>
         </div>
@@ -112,30 +105,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Chiffres Clés */}
-      <section className="py-16 lg:py-24 bg-background">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Mugix en Chiffres
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="font-display text-4xl md:text-5xl font-bold text-primary mb-2">
-                  {stat.value}
-                </div>
-                <p className="text-muted-foreground font-medium">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Notre Mission */}
       <section className="py-16 lg:py-24 bg-nature-dark text-primary-foreground">
         <div className="container mx-auto px-4 lg:px-8 text-center">
@@ -144,10 +113,10 @@ export default function About() {
             Notre Mission
           </h2>
           <p className="text-primary-foreground/80 mb-4 max-w-2xl mx-auto text-lg leading-relaxed">
-            Offrir à chacun des produits du quotidien alliant design moderne
-            et respect de l'environnement. Nous croyons que chaque geste
-            compte et nous travaillons chaque jour pour que Mugix soit
-            synonyme de style, durabilité et engagement écologique.
+            Offrir à chacun des produits du quotidien alliant design moderne et
+            respect de l'environnement. Nous croyons que chaque geste compte et
+            nous travaillons chaque jour pour que Mugix soit synonyme de style,
+            durabilité et engagement écologique.
           </p>
         </div>
       </section>
