@@ -4,6 +4,11 @@ import {
   categories as staticCategories,
 } from "@/data/products";
 
+export interface ProductColor {
+  name: string;
+  hex: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -13,6 +18,7 @@ export interface Product {
   images: string[];
   category_id: string | null;
   available: boolean;
+  colors?: ProductColor[];
   createdAt: string;
   updatedAt: string;
   category?: {

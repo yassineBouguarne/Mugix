@@ -99,6 +99,7 @@ export default function Products() {
                       }
                       category={product.category?.name}
                       available={product.available}
+                      colors={product.colors}
                     />
                   ))}
                 </div>

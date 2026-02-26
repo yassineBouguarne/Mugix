@@ -35,6 +35,11 @@ export const products: Product[] = [
     ],
     category_id: "cat-1",
     available: true,
+    colors: [
+      { name: "Noir Charbon", hex: "#2C2C2C" },
+      { name: "Blanc Cassé", hex: "#F5F0E8" },
+      { name: "Bordeaux", hex: "#722F37" },
+    ],
     createdAt: "2025-01-15T10:00:00.000Z",
     updatedAt: "2025-01-15T10:00:00.000Z",
     category: {
@@ -56,6 +61,12 @@ export const products: Product[] = [
     ],
     category_id: "cat-2",
     available: true,
+    colors: [
+      { name: "Rose Sakura", hex: "#F4A7B9" },
+      { name: "Bleu Glacier", hex: "#A8C5DA" },
+      { name: "Vert Sauge", hex: "#8FAF8F" },
+      { name: "Noir Mat", hex: "#1A1A1A" },
+    ],
     createdAt: "2025-01-20T10:00:00.000Z",
     updatedAt: "2025-01-20T10:00:00.000Z",
     category: {
@@ -78,6 +89,11 @@ export const products: Product[] = [
     ],
     category_id: "cat-3",
     available: true,
+    colors: [
+      { name: "Bronze Cuivré", hex: "#B87333" },
+      { name: "Noir Mat", hex: "#1A1A1A" },
+      { name: "Argent", hex: "#C0C0C0" },
+    ],
     createdAt: "2025-02-01T10:00:00.000Z",
     updatedAt: "2025-02-01T10:00:00.000Z",
     category: {
@@ -99,6 +115,12 @@ export const products: Product[] = [
     ],
     category_id: "cat-2",
     available: true,
+    colors: [
+      { name: "Blanc Glacier", hex: "#F0F4F8" },
+      { name: "Noir Mat", hex: "#1A1A1A" },
+      { name: "Bleu Nuit", hex: "#1B2A4A" },
+      { name: "Rose Poudré", hex: "#F2C4CE" },
+    ],
     createdAt: "2025-02-10T10:00:00.000Z",
     updatedAt: "2025-02-10T10:00:00.000Z",
     category: {

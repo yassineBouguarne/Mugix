@@ -12,6 +12,7 @@ interface ProductCardProps {
   imageUrl?: string;
   category?: string;
   available: boolean;
+  colors?: { name: string; hex: string }[];
 }
 
 export function ProductCard({
@@ -22,6 +23,7 @@ export function ProductCard({
   imageUrl,
   category,
   available,
+  colors,
 }: ProductCardProps) {
   const whatsappMessage = encodeURIComponent(
     `Bonjour ! Je souhaite commander : ${name} – Prix : ${price.toFixed(
@@ -74,6 +76,25 @@ export function ProductCard({
               {description}
             </p>
           </div>
+
+          {/* Color dots */}
+          {colors && colors.length > 0 && (
+            <div className="flex items-center gap-1.5">
+              {colors.slice(0, 4).map((color) => (
+                <span
+                  key={color.name}
+                  title={color.name}
+                  className="w-3.5 h-3.5 rounded-full border border-border flex-shrink-0"
+                  style={{ backgroundColor: color.hex }}
+                />
+              ))}
+              {colors.length > 4 && (
+                <span className="text-[10px] text-muted-foreground font-medium">
+                  +{colors.length - 4}
+                </span>
+              )}
+            </div>
+          )}
 
           <div className="flex items-center justify-between">
             <span className="text-lg font-bold text-primary">
