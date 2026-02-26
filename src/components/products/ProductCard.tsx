@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { MessageCircle, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getImageUrl } from "@/lib/image";
 
@@ -34,22 +33,24 @@ export function ProductCard({
   const fullImageUrl = getImageUrl(imageUrl);
 
   return (
-    <Link to={`/products/${id}`} className="block w-full max-w-[300px]">
-      <Card className="group overflow-hidden border-0 shadow-soft hover:shadow-medium transition-all duration-300 cursor-pointer flex flex-col h-[460px]">
+    <Link to={`/products/${id}`} className="block w-full">
+      <div className="group bg-card rounded-xl overflow-hidden shadow-soft hover:shadow-medium transition-all duration-300 hover:-translate-y-1 flex flex-col">
         {/* Image */}
-        <div className="relative h-[240px] bg-muted flex items-center justify-center overflow-hidden">
+        <div className="relative w-full aspect-square bg-white overflow-hidden">
           {fullImageUrl ? (
             <img
               src={fullImageUrl}
               alt={name}
-              className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
+              className="w-full h-full object-contain p-6 transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-            <Package className="h-14 w-14 text-primary/30 animate-float" />
+            <div className="w-full h-full flex items-center justify-center">
+              <Package className="h-14 w-14 text-primary/30 animate-float" />
+            </div>
           )}
 
           {category && (
-            <Badge className="absolute top-3 left-3 bg-card/90 text-foreground backdrop-blur-sm text-xs">
+            <Badge className="absolute top-3 left-3 bg-white/90 text-foreground shadow-sm text-xs font-medium">
               {category}
             </Badge>
           )}
@@ -64,18 +65,17 @@ export function ProductCard({
         </div>
 
         {/* Content */}
-        <CardContent className="p-4 flex flex-col flex-1">
+        <div className="p-4 flex flex-col gap-3 border-t border-border">
           <div>
-            <h3 className="font-display text-base font-semibold text-foreground mb-1 group-hover:text-primary transition-colors line-clamp-1">
+            <h3 className="font-display text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
               {name}
             </h3>
-            <p className="text-muted-foreground text-xs line-clamp-2">
+            <p className="text-muted-foreground text-xs line-clamp-2 mt-1">
               {description}
             </p>
           </div>
 
-          {/* Bottom */}
-          <div className="flex items-center justify-between mt-auto pt-4">
+          <div className="flex items-center justify-between">
             <span className="text-lg font-bold text-primary">
               {price.toFixed(2)} DH
             </span>
@@ -94,8 +94,8 @@ export function ProductCard({
               Commander
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </Link>
   );
 }

@@ -75,18 +75,18 @@ export default function Products() {
       <section className="py-12 lg:py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
           {productsLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="w-[260px] h-[340px] bg-muted rounded-2xl animate-pulse"
+                  className="w-full aspect-square bg-muted rounded-xl animate-pulse"
                 />
               ))}
             </div>
           ) : (
             <>
               {availableProducts && availableProducts.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 justify-items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                   {availableProducts.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -109,7 +109,7 @@ export default function Products() {
                   <h2 className="font-display text-2xl font-semibold text-muted-foreground mb-6">
                     Actuellement Indisponible
                   </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 opacity-60 justify-items-center">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 opacity-60">
                     {unavailableProducts.map((product) => (
                       <ProductCard
                         key={product.id}

@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Mail, Phone, MapPin, MessageCircle, Clock, Loader2 } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  MessageCircle,
+  Clock,
+  Loader2,
+} from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,20 +29,8 @@ const contactInfo = [
   {
     icon: Mail,
     title: "Email",
-    value: "hello@mugix.com",
-    link: "mailto:hello@mugix.com",
-  },
-  {
-    icon: MapPin,
-    title: "Adresse",
-    value: "123 Crystal Spring Road, Mountain Valley, CA 90210",
-    link: null,
-  },
-  {
-    icon: Clock,
-    title: "Horaires",
-    value: "Lun-Ven : 8h-18h, Sam : 9h-16h",
-    link: null,
+    value: "mugix.ma@gmail.com",
+    link: "mailto:mugix.ma@gmail.com",
   },
 ];
 
@@ -86,7 +81,8 @@ export default function Contact() {
               Contactez-Nous
             </h1>
             <p className="text-lg text-muted-foreground">
-              Des questions ou des remarques ? Nous serions ravis de vous entendre.
+              Des questions ou des remarques ? Nous serions ravis de vous
+              entendre.
             </p>
           </div>
         </div>
@@ -133,7 +129,9 @@ export default function Contact() {
                   <div className="flex items-center gap-4">
                     <MessageCircle className="h-8 w-8" />
                     <div className="flex-1">
-                      <h3 className="font-semibold mb-1">Vous préférez WhatsApp ?</h3>
+                      <h3 className="font-semibold mb-1">
+                        Vous préférez WhatsApp ?
+                      </h3>
                       <p className="text-primary-foreground/80 text-sm">
                         Discutez directement avec nous pour des réponses rapides
                       </p>
@@ -164,11 +162,23 @@ export default function Contact() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="firstName">Prénom</Label>
-                        <Input id="firstName" placeholder="Jean" required value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                        <Input
+                          id="firstName"
+                          placeholder="Jean"
+                          required
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="lastName">Nom</Label>
-                        <Input id="lastName" placeholder="Dupont" required value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                        <Input
+                          id="lastName"
+                          placeholder="Dupont"
+                          required
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                        />
                       </div>
                     </div>
 
@@ -186,7 +196,13 @@ export default function Contact() {
 
                     <div className="space-y-2">
                       <Label htmlFor="phone">Téléphone (Optionnel)</Label>
-                      <Input id="phone" type="tel" placeholder={phoneDisplay} value={phone} onChange={(e) => setPhone(e.target.value)} />
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder={phoneDisplay}
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
                     </div>
 
                     <div className="space-y-2">
@@ -201,26 +217,21 @@ export default function Contact() {
                       />
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full" disabled={createContact.isPending}>
-                      {createContact.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                    <Button
+                      type="submit"
+                      size="lg"
+                      className="w-full"
+                      disabled={createContact.isPending}
+                    >
+                      {createContact.isPending && (
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      )}
                       Envoyer le Message
                     </Button>
                   </form>
                 </CardContent>
               </Card>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Map Placeholder */}
-      <section className="h-96 bg-muted relative">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <MapPin className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
-            <p className="text-muted-foreground">
-              L'intégration de la carte peut être ajoutée ici
-            </p>
           </div>
         </div>
       </section>

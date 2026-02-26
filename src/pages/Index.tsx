@@ -102,16 +102,16 @@ export default function Index() {
           </div>
 
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="w-[300px] h-[480px] bg-muted rounded-2xl animate-pulse"
+                  className="w-full aspect-square bg-muted rounded-xl animate-pulse"
                 />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {featuredProducts?.map((product) => (
                 <ProductCard
                   key={product.id}
