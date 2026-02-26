@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { MessageCircle, Mail, ArrowLeft, Package, Check, Minus, Plus } from "lucide-react";
+import { MessageCircle, Mail, ArrowLeft, Package, Check, Minus, Plus, Paintbrush } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import { useProduct } from "@/hooks/useProducts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getImageUrls } from "@/lib/image";
@@ -24,6 +25,8 @@ export default function ProductDetail() {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [quantity, setQuantity] = useState(1);
   const [colorCounts, setColorCounts] = useState<Record<string, number>>({});
+  const [isCustom, setIsCustom] = useState(false);
+  const [customNote, setCustomNote] = useState("");
 
   // Init carousel sync
   useEffect(() => {
@@ -139,6 +142,7 @@ export default function ProductDetail() {
     `Prix unitaire : ${Number(product.price).toFixed(2)} DH`,
     `Quantité : ${quantity}`,
     colorSummary ? `Couleur(s) : ${colorSummary}` : null,
+    isCustom ? `Personnalisation : Oui — ${customNote || "à préciser"}` : null,
     `Lien : ${window.location.href}`,
   ].filter(Boolean).join("\n");
 
@@ -391,6 +395,47 @@ export default function ProductDetail() {
                   )}
                 </div>
               )}
+
+              {/* Personnalisation */}
+              <div className="border border-border rounded-xl p-4 space-y-3">
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <div
+                    onClick={() => setIsCustom(!isCustom)}
+                    className={cn(
+                      "w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors",
+                      isCustom
+                        ? "bg-primary border-primary"
+                        : "border-border group-hover:border-primary/50",
+                    )}
+                  >
+                    {isCustom && <Check className="h-3 w-3 text-primary-foreground" />}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Paintbrush className="h-4 w-4 text-primary" />
+                    <span className="text-sm font-semibold text-foreground">
+                      Je veux personnaliser mon produit
+                    </span>
+                  </div>
+                </label>
+                <p className="text-xs text-muted-foreground pl-8">
+                  Faites imprimer votre logo ou design sur le produit. Nos équipes vous contacteront pour confirmer les détails.
+                </p>
+
+                {isCustom && (
+                  <div className="pl-8 space-y-2">
+                    <Textarea
+                      placeholder="Décrivez votre personnalisation : logo, texte, couleurs souhaitées, format du fichier..."
+                      rows={3}
+                      value={customNote}
+                      onChange={(e) => setCustomNote(e.target.value)}
+                      className="text-sm resize-none"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Vous pouvez également envoyer vos fichiers (logo, image) par email ou WhatsApp après la commande.
+                    </p>
+                  </div>
+                )}
+              </div>
 
               {/* Order Buttons */}
               <div className="pt-4 border-t border-border flex flex-col sm:flex-row gap-3">
